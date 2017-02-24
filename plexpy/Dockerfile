@@ -1,0 +1,2 @@
+FROM linuxserver/plexpy
+MAINTAINER zackbcom

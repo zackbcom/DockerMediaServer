@@ -1,0 +1,2 @@
+FROM linuxserver/deluge
+MAINTAINER zackbcom

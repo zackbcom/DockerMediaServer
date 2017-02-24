@@ -1,0 +1,171 @@
+version: '3'
+
+services:
+  nzbget:
+    build: nzbget/
+    container_name: nzbget
+    restart: always
+    ports:
+      - "6789:6789"
+    environment:
+      - PGID=0000
+      - PUID=0000
+    volumes:
+      - ./nzbget/config:/config
+      - nzbtomedia-vol:/downloads/scripts
+
+  nzbtomedia:
+    build: nzbtomedia/
+    container_name: nzbtomedia
+    restart: always
+    volumes:
+      - nzbtomedia-vol:/app
+
+  couchpotato:
+    build: couchpotato/
+    container_name: couchpotato
+    restart: always
+    ports:
+      - "5050:5050"
+    environment:
+      - PGID=0000
+      - PUID=0000
+      - TZ=America/Chicago
+    volumes:
+      - ./couchpotato/config:/config
+
+  radarr:
+    build: radarr/
+    container_name: radarr
+    restart: always
+    ports:
+      - "7878:7878"
+    environment:
+      - PGID=0000
+      - PUID=0000
+      - TZ=America/Chicago
+    volumes:
+      - ./radarr/config:/config
+      - /dev/rtc:/dev/rtc:ro
+
+  sickrage:
+    build: sickrage/
+    container_name: sickrage
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - PGID=0000
+      - PUID=0000
+      - TZ=America/Chicago
+    volumes:
+      - ./sickrage/config:/config
+
+  sonarr:
+    build: sonarr/
+    container_name: sonarr
+    restart: always
+    ports:
+      - "8989:8989"
+    environment:
+      - PGID=0000
+      - PUID=0000
+      - TZ=America/Chicago
+    volumes:
+      - ./sonarr/config:/config
+      - /dev/rtc:/dev/rtc:ro
+
+  plexpy:
+    build: plexpy/
+    container_name: plexpy
+    restart: always
+    ports:
+      - "8181:8181"
+    environment:
+      - PGID=0000
+      - PUID=0000
+      - TZ=America/Chicago
+    volumes:
+      - ./plexpy/config:/config
+      #- <path to plexlogs>:/logs:ro
+
+  plexrequests:
+    build: plexrequests/
+    container_name: plexrequests
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PGID=0000
+      - PUID=0000
+      - TZ=America/Chicago
+      - URL_BASE=
+    volumes:
+      - ./plexrequests/config:/config
+      - /etc/localtime:/etc/localtime:ro
+
+  rutorrent:
+    build: rutorrent/
+    container_name: rutorrent
+    restart: always
+    ports:
+      - "81:80"
+      - "5000:5000"
+      - "51413:51413"
+      - "6881:6881/udp"
+    environment:
+      - PGID=0000 #Change from non root
+      - PUID=0000 #Change from non root
+      - TZ=America/Chicago
+    volumes:
+      - ./rutorrent/config:/config
+      #- <path to downloads>:/downloads
+
+  deluge:
+    build: deluge/
+    container_name: deluge
+    restart: always
+    environment:
+      - PGID=0000
+      - PUID=0000
+      - TZ=America/Chicago
+    volumes:
+      - ./deluge/config:/config
+      #- <path to downloads>:/downloads
+    network_mode: "host"
+
+  headphones:
+    build: headphones/
+    container_name: headphones
+    restart: always
+    ports:
+      - "8182:8181"
+    environment:
+      - PGID=0000 #Change from non root
+      - PUID=0000 #Change from non root
+      - TZ=America/Chicago
+    volumes:
+      - ./headphones/config:/config
+      #- <path to downloads>:/downloads
+      #- /path/to/music:/music 
+
+  mylar:
+    build: mylar/
+    container_name: mylar
+    restart: always
+    ports:
+      - "8090:8090"
+    environment:
+      - PGID=0000 #Change from non root
+      - PUID=0000 #Change from non root
+      - TZ=America/Chicago
+    volumes:
+      - ./mylar/config:/config
+      #- <path to downloads>:/downloads
+      #- <comics-folder>:/comics 
+
+volumes:
+  nzbtomedia-vol:
+  movies:
+    driver: local
+
